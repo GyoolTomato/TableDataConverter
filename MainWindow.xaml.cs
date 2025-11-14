@@ -172,7 +172,7 @@ namespace TableDataConverter
         void CreateData(string fileName, XLWorkbook workBook)
         {
             //
-            var fs = new FileStream($"{fileName}.byte", FileMode.Create, FileAccess.Write);
+            var fs = new FileStream($"{fileName}.bytes", FileMode.Create, FileAccess.Write);
             var sw = new StreamWriter(fs);
 
             //
