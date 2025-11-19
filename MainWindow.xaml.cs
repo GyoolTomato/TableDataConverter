@@ -22,6 +22,10 @@ namespace TableDataConverter
     public partial class MainWindow : Window
     {
         //
+        static public string pPathScript = string.Empty;
+        static public string pPathData = string.Empty;
+
+        //
         TableLoaderCreater _tlCreater;
 
         //
@@ -36,8 +40,16 @@ namespace TableDataConverter
         /// </summary>
         public MainWindow()
         {
+            //
             InitializeComponent();
 
+            //
+            var path = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
+            path = $"{path}\\{new DirectoryInfo(AppContext.BaseDirectory).Name.Replace("Tables", "")}";
+            pPathScript = $"{path}\\Assets\\Scripts\\_Common\\Table";
+            pPathData = $"{path}\\Assets\\Table";
+
+            //
             _tlCreater = new TableLoaderCreater();
             _sb = new StringBuilder();
 
@@ -97,16 +109,21 @@ namespace TableDataConverter
             }
 
             //
+            _tlCreater.Create(_fileInfos);
+
+            //
             MessageBox.Show($"클릭");
         }
 
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="workBook"></param>
         void CreateClass(string fileName, XLWorkbook workBook)
         {
             //
-            var fs = new FileStream($"{fileName}.cs", FileMode.Create, FileAccess.Write);
+            var fs = new FileStream($"{pPathScript}\\{fileName}.cs", FileMode.Create, FileAccess.Write);
             var sw = new StreamWriter(fs);
 
             //
@@ -127,22 +144,42 @@ namespace TableDataConverter
             fs.Close();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="variables"></param>
+        /// <returns></returns>
         string ClassCode(string name, List<string> variables)
         {
-            var temp = string.Empty;
-            
-            temp = $"using System;\r\nusing System.IO;\r\n\r\npublic class {name.Replace(".xlsx", "")}\r\n" + "{";
+            var className = name.Replace(".xlsx", "");
+
+            _sb.Clear();
+            _sb.Append($"using System;\r\nusing System.IO;\r\n\r\npublic class {className}\r\n{{");
 
             foreach (var item in variables)
             {
-                temp += item;
+                _sb.Append(item);
             }
 
-            temp += "\r\n}";
+            _sb.Append($"\r\n\r\n    public static {className} GetItem(int key)\r\n");
+            _sb.Append("    {\r\n");
+            _sb.Append($"        if (Manager_Table.Instance._dic{className}.ContainsKey(key))\r\n");
+            _sb.Append($"            return Manager_Table.Instance._dic{className}[key];\r\n");
+            _sb.Append("        else\r\n");
+            _sb.Append("            return null;\r\n");
+            _sb.Append("    }\r\n");
+            _sb.Append("}");
 
-            return temp;
+            return _sb.ToString();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         string ClassVariable(string type, string name)
         {
             //
@@ -163,16 +200,20 @@ namespace TableDataConverter
 
             //
             _sb.Clear();
+            _sb.AppendFormat("\r\n    public {0} {1} {{ set; get; }} = {2};", type, name, init);
 
-            var temp = string.Format("\r\n    public {0} {1} {{ set; get; }} = {2};", type, name, init);
-
-            return temp;
+            return _sb.ToString();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="workBook"></param>
         void CreateData(string fileName, XLWorkbook workBook)
         {
             //
-            var fs = new FileStream($"{fileName}.bytes", FileMode.Create, FileAccess.Write);
+            var fs = new FileStream($"{pPathData}\\{fileName}.bytes", FileMode.Create, FileAccess.Write);
             var sw = new StreamWriter(fs);
 
             //
@@ -216,6 +257,12 @@ namespace TableDataConverter
             fs.Close();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         string DataCode(string name, string value)
         {
             var temp = string.Format("\"{0}\":\"{1}\"", name, value);
@@ -223,6 +270,12 @@ namespace TableDataConverter
             return temp;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         string DataCode(string name, double value)
         {
             var temp = string.Format("\"{0}\":{1}", name, value);

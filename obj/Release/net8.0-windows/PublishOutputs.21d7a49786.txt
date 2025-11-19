@@ -1,0 +1,13 @@
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\publish\TableDataConverter.exe
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\publish\TableDataConverter.dll
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\publish\TableDataConverter.deps.json
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\publish\TableDataConverter.runtimeconfig.json
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\publish\TableDataConverter.pdb
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\publish\ClosedXML.dll
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\publish\ClosedXML.Parser.dll
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\publish\DocumentFormat.OpenXml.dll
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\publish\DocumentFormat.OpenXml.Framework.dll
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\publish\ExcelNumberFormat.dll
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\publish\RBush.dll
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\publish\SixLabors.Fonts.dll
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\publish\System.IO.Packaging.dll
