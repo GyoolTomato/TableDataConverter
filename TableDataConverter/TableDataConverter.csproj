@@ -13,6 +13,8 @@
 
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <PublishTrimmed>false</PublishTrimmed>
+    <SignAssembly>False</SignAssembly>
+    <AssemblyOriginatorKeyFile>D:\OneDrive\바탕 화면\mycert.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

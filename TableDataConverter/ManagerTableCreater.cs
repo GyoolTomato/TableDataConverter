@@ -48,7 +48,7 @@ namespace TableDataConverter
                 _sb.Append($"        var temp = JsonConvert.DeserializeObject<List<{fileName}>>(Manager_Addressable.Instance.GetTable(\"{fileName}\").text);\r\n");
                 _sb.Append($"        foreach (var item in temp)\r\n");
                 _sb.Append("        {\r\n");
-                _sb.Append($"            _dic{fileName}.Add(item.key, item);\r\n");
+                _sb.Append($"            _dic{fileName}.Add(item.pKey, item);\r\n");
                 _sb.Append("        }\r\n");
             }
             _sb.Append("    }\r\n\r\n");

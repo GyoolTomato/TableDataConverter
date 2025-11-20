@@ -116,7 +116,9 @@ namespace TableDataConverter
             var tempVariables = new List<string>();
             for (int col = 1; col <= range.ColumnCount(); col++)
             {
-                tempVariables.Add(ClassVariable(worksheet.Cell(3, col).Value.GetText(), worksheet.Cell(2, col).Value.GetText()));
+                var temp = ClassVariable(worksheet.Cell(3, col).Value.GetText(), worksheet.Cell(2, col).Value.GetText());
+                if (temp != string.Empty)
+                    tempVariables.Add(temp);
             }
 
             sw.Write(ClassCode(fileName, tempVariables));
@@ -137,9 +139,11 @@ namespace TableDataConverter
             _sb.Clear();
             _sb.Append($"using System;\r\nusing System.IO;\r\n\r\npublic class {className}\r\n{{");
 
-            foreach (var item in variables)
+            for (int i = 0; i < variables.Count; i++)
             {
-                _sb.Append(item);
+                _sb.Append("\r\n");
+                _sb.Append(variables[i]);
+                _sb.Append("\r\n");
             }
 
             _sb.Append($"\r\n\r\n    public static {className} GetItem(int key)\r\n");
@@ -179,8 +183,17 @@ namespace TableDataConverter
             }
 
             //
+            var proName = string.Empty;
             _sb.Clear();
-            _sb.AppendFormat("\r\n    public {0} {1} {{ set; get; }} = {2};", type, name, init);
+            for (int i = 0; i < name.Length; i++)
+            {                
+                _sb.Append(i == 0 ? char.ToUpper(name[i]) : name[i]);
+            }
+            proName = _sb.ToString();
+
+            _sb.Clear();
+            _sb.AppendFormat("    {0} {1} = {2};", type, name, init);
+            _sb.AppendFormat("\r\n    public {0} p{1} => {2};", type, proName, name);
 
             return _sb.ToString();
         }

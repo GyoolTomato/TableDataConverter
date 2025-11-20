@@ -239,7 +239,6 @@ C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\win-x
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\win-x64\hostfxr.dll
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\win-x64\hostpolicy.dll
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\win-x64\mscordaccore.dll
-C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\win-x64\mscordaccore_amd64_amd64_8.0.1925.36514.dll
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\win-x64\mscordbi.dll
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\win-x64\mscorrc.dll
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\win-x64\msquic.dll
@@ -482,3 +481,5 @@ C:\GitHub\TableDataConverter\TableDataConverter\obj\Release\net8.0-windows\win-x
 C:\GitHub\TableDataConverter\TableDataConverter\obj\Release\net8.0-windows\win-x64\TableDataConverter.pdb
 C:\GitHub\TableDataConverter\TableDataConverter\obj\Release\net8.0-windows\win-x64\TableDataConverter.genruntimeconfig.cache
 C:\GitHub\TableDataConverter\TableDataConverter\obj\Release\net8.0-windows\win-x64\ref\TableDataConverter.dll
+C:\GitHub\TableDataConverter\TableDataConverter\obj\Release\net8.0-windows\win-x64\TableDataConverter.sourcelink.json
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\win-x64\mscordaccore_amd64_amd64_8.0.2225.52707.dll
