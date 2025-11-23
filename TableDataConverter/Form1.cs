@@ -10,7 +10,7 @@ namespace TableDataConverter
         static public string pPathData = string.Empty;
 
         //
-        ManagerTableCreater _mtCreater;
+        TableDataLoaderCreater _mtCreater;
 
         //
         List<FileInfo> _fileInfos;
@@ -30,7 +30,7 @@ namespace TableDataConverter
             pPathData = $"{path}\\Assets\\Table";
 
             //
-            _mtCreater = new ManagerTableCreater();
+            _mtCreater = new TableDataLoaderCreater();
             _sb = new StringBuilder();
 
             RefreshFileInfos();
@@ -92,7 +92,7 @@ namespace TableDataConverter
             _mtCreater.Create(_fileInfos);
 
             //
-            MessageBox.Show($"클릭");
+            MessageBox.Show($"완료");
         }
 
         /// <summary>
@@ -137,21 +137,25 @@ namespace TableDataConverter
             var className = name.Replace(".xlsx", "");
 
             _sb.Clear();
-            _sb.Append($"using System;\r\nusing System.IO;\r\n\r\npublic class {className}\r\n{{");
+            _sb.Append($"using System;\r\nusing System.IO;\r\nusing System.Collections.Generic;\r\n\r\npublic class {className}\r\n{{");
 
             for (int i = 0; i < variables.Count; i++)
             {
                 _sb.Append("\r\n");
                 _sb.Append(variables[i]);
-                _sb.Append("\r\n");
+                //_sb.Append("\r\n");
             }
 
             _sb.Append($"\r\n\r\n    public static {className} GetItem(int key)\r\n");
             _sb.Append("    {\r\n");
-            _sb.Append($"        if (Manager_Table.Instance._dic{className}.ContainsKey(key))\r\n");
-            _sb.Append($"            return Manager_Table.Instance._dic{className}[key];\r\n");
+            _sb.Append($"        if (Data.TableDataLoader.Instance._dic{className}.ContainsKey(key))\r\n");
+            _sb.Append($"            return Data.TableDataLoader.Instance._dic{className}[key];\r\n");
             _sb.Append("        else\r\n");
             _sb.Append("            return null;\r\n");
+            _sb.Append("    }\r\n");
+            _sb.Append($"\r\n\r\n    public static List<{className}> GetList()\r\n");
+            _sb.Append("    {\r\n");
+            _sb.Append($"        return Data.TableDataLoader.Instance._list{className};\r\n");
             _sb.Append("    }\r\n");
             _sb.Append("}");
 
@@ -192,8 +196,8 @@ namespace TableDataConverter
             proName = _sb.ToString();
 
             _sb.Clear();
-            _sb.AppendFormat("    {0} {1} = {2};", type, name, init);
-            _sb.AppendFormat("\r\n    public {0} p{1} => {2};", type, proName, name);
+            _sb.AppendFormat("    public {0} {1} = {2};", type, name, init);
+            //_sb.AppendFormat("\r\n    public {0} p{1} => {2};", type, proName, name);
 
             return _sb.ToString();
         }

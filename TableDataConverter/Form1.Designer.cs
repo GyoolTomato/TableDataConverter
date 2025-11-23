@@ -34,21 +34,21 @@
             // 
             // button1
             // 
-            button1.Location = new Point(274, 127);
+            button1.Location = new Point(12, 12);
             button1.Name = "button1";
             button1.Size = new Size(264, 76);
             button1.TabIndex = 0;
-            button1.Text = "button1";
+            button1.Text = "Refresh";
             button1.UseVisualStyleBackColor = true;
             button1.Click += OnBtn_Refresh;
             // 
             // button2
             // 
-            button2.Location = new Point(274, 273);
+            button2.Location = new Point(12, 94);
             button2.Name = "button2";
             button2.Size = new Size(264, 123);
             button2.TabIndex = 1;
-            button2.Text = "button2";
+            button2.Text = "Confirm";
             button2.UseVisualStyleBackColor = true;
             button2.Click += OnBtn_Confirm;
             // 
@@ -56,7 +56,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(289, 230);
             Controls.Add(button2);
             Controls.Add(button1);
             Name = "Form1";
