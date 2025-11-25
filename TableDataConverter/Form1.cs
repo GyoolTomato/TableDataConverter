@@ -182,6 +182,9 @@ namespace TableDataConverter
                 case "float":
                     init = "0f";
                     break;
+                case "string":
+                    init = "string.Empty";
+                    break;
                 default:
                     return string.Empty;
             }

@@ -48,8 +48,8 @@ namespace TableDataConverter
             {
                 //
                 var fileName = item.Name.Replace(".xlsx", "");
-                _sb.Append($"            var temp = JsonConvert.DeserializeObject<List<{fileName}>>(Manager_Addressable.Instance.GetTable(\"{fileName}\").text);\r\n");
-                _sb.Append($"            foreach (var item in temp)\r\n");
+                _sb.Append($"            var temp{fileName} = JsonConvert.DeserializeObject<List<{fileName}>>(Manager_Addressable.Instance.GetTable(\"{fileName}\").text);\r\n");
+                _sb.Append($"            foreach (var item in temp{fileName})\r\n");
                 _sb.Append("            {\r\n");
                 _sb.Append($"                _list{fileName}.Add(item);\r\n");
                 _sb.Append($"                _dic{fileName}.Add(item.key, item);\r\n");
