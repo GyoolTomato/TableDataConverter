@@ -1,4 +1,5 @@
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\TableDataConverter.exe
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\TableDataConverter.dll.config
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\TableDataConverter.deps.json
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\TableDataConverter.runtimeconfig.json
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\TableDataConverter.dll
@@ -239,7 +240,7 @@ C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\hostfxr.dll
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\hostpolicy.dll
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\mscordaccore.dll
-C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\mscordaccore_amd64_amd64_8.0.1925.36514.dll
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\mscordaccore_amd64_amd64_8.0.2225.52707.dll
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\mscordbi.dll
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\mscorrc.dll
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\msquic.dll
@@ -471,6 +472,7 @@ C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64
 C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\zh-Hant\WindowsFormsIntegration.resources.dll
 C:\GitHub\TableDataConverter\TableDataConverter\obj\Debug\net8.0-windows\win-x64\TableDataConverter.csproj.AssemblyReference.cache
 C:\GitHub\TableDataConverter\TableDataConverter\obj\Debug\net8.0-windows\win-x64\TableDataConverter.Form1.resources
+C:\GitHub\TableDataConverter\TableDataConverter\obj\Debug\net8.0-windows\win-x64\TableDataConverter.Properties.Resources.resources
 C:\GitHub\TableDataConverter\TableDataConverter\obj\Debug\net8.0-windows\win-x64\TableDataConverter.csproj.GenerateResource.cache
 C:\GitHub\TableDataConverter\TableDataConverter\obj\Debug\net8.0-windows\win-x64\TableDataConverter.GeneratedMSBuildEditorConfig.editorconfig
 C:\GitHub\TableDataConverter\TableDataConverter\obj\Debug\net8.0-windows\win-x64\TableDataConverter.AssemblyInfoInputs.cache

@@ -48,7 +48,7 @@ namespace TableDataConverter
             {
                 //
                 var fileName = item.Name.Replace(".xlsx", "");
-                _sb.Append($"            var temp{fileName} = JsonConvert.DeserializeObject<List<{fileName}>>(Manager_Addressable.Instance.GetTable(\"{fileName}\").text);\r\n");
+                _sb.Append($"            var temp{fileName} = JsonConvert.DeserializeObject<List<{fileName}>>(Manager_Addressable.Instance.GetTable(\"Assets/Table/{fileName}.bytes\").text);\r\n");
                 _sb.Append($"            foreach (var item in temp{fileName})\r\n");
                 _sb.Append("            {\r\n");
                 _sb.Append($"                _list{fileName}.Add(item);\r\n");
