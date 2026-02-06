@@ -1,0 +1,3 @@
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\win-x64\publish\TableDataConverter.pdb
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\win-x64\publish\TableDataConverter.dll.config
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Release\net8.0-windows\win-x64\publish\TableDataConverter.exe

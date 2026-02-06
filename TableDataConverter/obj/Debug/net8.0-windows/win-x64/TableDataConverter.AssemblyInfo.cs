@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TableDataConverter")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+63ddbec95ecd6aa64e9c2fba615faf74a03ad762")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+467201bb42e3d3c0d169ecd63c7651b825cfa20d")]
 [assembly: System.Reflection.AssemblyProductAttribute("TableDataConverter")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TableDataConverter")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

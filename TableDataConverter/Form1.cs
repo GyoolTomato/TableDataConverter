@@ -1,4 +1,5 @@
 using ClosedXML.Excel;
+using System.Configuration;
 using System.Text;
 
 namespace TableDataConverter
@@ -223,27 +224,30 @@ namespace TableDataConverter
             if (range == null)
                 return;
 
+            var rowCount = range.LastRow().RowNumber();
+            var columnCount = range.LastColumn().ColumnNumber();            
+
             _sb.Clear();
             _sb.Append("[");
             var tempVariables = new List<string>();
-            for (int row = 4; row <= range.RowCount(); row++)
+            for (int row = 4; row <= rowCount; row++)
             {
                 _sb.Append("{");
-                for (int col = 1; col <= range.ColumnCount(); col++)
+                for (int col = 1; col <= columnCount; col++)
                 {
                     var cellValue = worksheet.Cell(row, col).Value;
                     _sb.Append(cellValue.IsText ?
                         DataCode(worksheet.Cell(2, col).GetText(), cellValue.GetText()) :
                         DataCode(worksheet.Cell(2, col).GetText(), cellValue.GetNumber()));
 
-                    if (col < range.ColumnCount())
+                    if (col < columnCount)
                     {
                         _sb.Append(",");
                     }
                 }
                 _sb.Append("}");
 
-                if (row < range.RowCount())
+                if (row < rowCount)
                 {
                     _sb.Append(",");
                 }

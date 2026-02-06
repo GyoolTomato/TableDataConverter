@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\github\\tabledataconverter\\tabledataconverter\\TableDataConverter.csproj": {}
+    "C:\\GitHub\\TableDataConverter\\TableDataConverter\\TableDataConverter.csproj": {}
   },
   "projects": {
-    "C:\\github\\tabledataconverter\\tabledataconverter\\TableDataConverter.csproj": {
+    "C:\\GitHub\\TableDataConverter\\TableDataConverter\\TableDataConverter.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\github\\tabledataconverter\\tabledataconverter\\TableDataConverter.csproj",
+        "projectUniqueName": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\TableDataConverter.csproj",
         "projectName": "TableDataConverter",
-        "projectPath": "C:\\github\\tabledataconverter\\tabledataconverter\\TableDataConverter.csproj",
+        "projectPath": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\TableDataConverter.csproj",
         "packagesPath": "C:\\Users\\gtmt0\\.nuget\\packages\\",
-        "outputPath": "C:\\github\\tabledataconverter\\tabledataconverter\\obj\\",
+        "outputPath": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\gtmt0\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -39,8 +39,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "10.0.100"
+        }
       },
       "frameworks": {
         "net8.0-windows7.0": {
@@ -68,20 +67,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-              "version": "[8.0.22, 8.0.22]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Runtime.win-x64",
-              "version": "[8.0.22, 8.0.22]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-              "version": "[8.0.22, 8.0.22]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
@@ -90,7 +75,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.416/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
