@@ -104,8 +104,10 @@ namespace TableDataConverter
         void CreateClass(string fileName, XLWorkbook workBook)
         {
             //
+#if !DEBUG
             var fs = new FileStream($"{pPathScript}\\{fileName}.cs", FileMode.Create, FileAccess.Write);
             var sw = new StreamWriter(fs);
+#endif
 
             //
             var worksheet = workBook.Worksheet(1);
@@ -114,17 +116,28 @@ namespace TableDataConverter
             if (range == null)
                 return;
 
-            var tempVariables = new List<string>();
+            var tempVariables = new List<KeyValuePair<string, string>>();
             for (int col = 1; col <= range.ColumnCount(); col++)
             {
-                var temp = ClassVariable(worksheet.Cell(3, col).Value.GetText(), worksheet.Cell(2, col).Value.GetText());
-                if (temp != string.Empty)
-                    tempVariables.Add(temp);
+                var key = worksheet.Cell(3, col).Value.GetText();
+                switch (key)
+                {
+                    case "int":
+                    case "long":
+                    case "double":
+                    case "float":
+                    case "string":
+                        var temp = new KeyValuePair<string, string>(key, worksheet.Cell(2, col).Value.GetText());
+                        tempVariables.Add(temp);
+                        break;
+                }
             }
-
-            sw.Write(ClassCode(fileName, tempVariables));
+            var data = ClassCode(fileName, tempVariables);
+#if !DEBUG
+            sw.Write(data);
             sw.Close();
             fs.Close();
+#endif
         }
 
         /// <summary>
@@ -133,28 +146,43 @@ namespace TableDataConverter
         /// <param name="name"></param>
         /// <param name="variables"></param>
         /// <returns></returns>
-        string ClassCode(string name, List<string> variables)
+        string ClassCode(string name, List<KeyValuePair<string, string>> variables)
         {
             var className = name.Replace(".xlsx", "");
 
             _sb.Clear();
-            _sb.Append($"using System;\r\nusing System.IO;\r\nusing System.Collections.Generic;\r\n\r\npublic class {className}\r\n{{");
-
+            _sb.Append($"using System;\r\nusing System.IO;\r\nusing System.Collections.Generic;\r\nusing Newtonsoft.Json;\r\n\r\npublic class {className}\r\n{{");
+            _sb.Append("\r\n    public class Values");
+            _sb.Append("\r\n    {");
+            foreach (var item in variables)
+            {
+                _sb.AppendFormat("\r\n        public {0} {1} {{ private set; get; }}", item.Key, item.Value);
+            }
+            _sb.Append("\r\n\r\n        [JsonConstructor]");
+            _sb.Append("\r\n        public Values(");
             for (int i = 0; i < variables.Count; i++)
             {
-                _sb.Append("\r\n");
-                _sb.Append(variables[i]);
-                //_sb.Append("\r\n");
+                _sb.AppendFormat("{0} {1}", variables[i].Key, variables[i].Value);
+                if (i < variables.Count - 1)
+                    _sb.Append(",");
             }
+            _sb.Append(")");
+            _sb.Append("\r\n        {");
+            foreach (var item in variables)
+            {
+                _sb.AppendFormat("\r\n            this.{0} = {1};", item.Value, item.Value);
+            }
+            _sb.Append("\r\n        }");
+            _sb.Append("\r\n    }");
 
-            _sb.Append($"\r\n\r\n    public static {className} GetItem(int key)\r\n");
+            _sb.Append($"\r\n\r\n    public static {className}.Values GetItem(int key)\r\n");
             _sb.Append("    {\r\n");
             _sb.Append($"        if (Data.TableDataLoader.Instance._dic{className}.ContainsKey(key))\r\n");
             _sb.Append($"            return Data.TableDataLoader.Instance._dic{className}[key];\r\n");
             _sb.Append("        else\r\n");
             _sb.Append("            return null;\r\n");
             _sb.Append("    }\r\n");
-            _sb.Append($"\r\n\r\n    public static List<{className}> GetList()\r\n");
+            _sb.Append($"\r\n\r\n    public static List<{className}.Values> GetList()\r\n");
             _sb.Append("    {\r\n");
             _sb.Append($"        return Data.TableDataLoader.Instance._list{className};\r\n");
             _sb.Append("    }\r\n");
@@ -166,56 +194,15 @@ namespace TableDataConverter
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        string ClassVariable(string type, string name)
-        {
-            //
-            var init = string.Empty;
-            switch (type)
-            {
-                case "int":
-                case "long":
-                case "double":
-                    init = "0";
-                    break;
-                case "float":
-                    init = "0f";
-                    break;
-                case "string":
-                    init = "string.Empty";
-                    break;
-                default:
-                    return string.Empty;
-            }
-
-            //
-            var proName = string.Empty;
-            _sb.Clear();
-            for (int i = 0; i < name.Length; i++)
-            {                
-                _sb.Append(i == 0 ? char.ToUpper(name[i]) : name[i]);
-            }
-            proName = _sb.ToString();
-
-            _sb.Clear();
-            _sb.AppendFormat("    public {0} {1} = {2};", type, name, init);
-            //_sb.AppendFormat("\r\n    public {0} p{1} => {2};", type, proName, name);
-
-            return _sb.ToString();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="fileName"></param>
         /// <param name="workBook"></param>
         void CreateData(string fileName, XLWorkbook workBook)
         {
+#if !DEBUG
             //
             var fs = new FileStream($"{pPathData}\\{fileName}.bytes", FileMode.Create, FileAccess.Write);
             var sw = new StreamWriter(fs);
+#endif
 
             //
             var worksheet = workBook.Worksheet(1);
@@ -236,6 +223,7 @@ namespace TableDataConverter
                 for (int col = 1; col <= columnCount; col++)
                 {
                     var cellValue = worksheet.Cell(row, col).Value;
+
                     _sb.Append(cellValue.IsText ?
                         DataCode(worksheet.Cell(2, col).GetText(), cellValue.GetText()) :
                         DataCode(worksheet.Cell(2, col).GetText(), cellValue.GetNumber()));
@@ -254,11 +242,11 @@ namespace TableDataConverter
             }
             _sb.Append("]");
 
-
-
+#if !DEBUG
             sw.Write(_sb);
             sw.Close();
             fs.Close();
+#endif
         }
 
         /// <summary>
