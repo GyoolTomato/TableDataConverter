@@ -27,8 +27,8 @@ namespace TableDataConverter
             //
             var path = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
             path = $"{path}\\{new DirectoryInfo(AppContext.BaseDirectory).Name.Replace("Tables", "")}";
-            pPathScript = $"{path}\\Assets\\Scripts\\_Common\\Table";
-            pPathData = $"{path}\\Assets\\Table";
+            pPathScript = $"{path}\\Assets\\Scripts\\_Common\\Tables";
+            pPathData = $"{path}\\Assets\\Tables";
 
             //
             _mtCreater = new TableDataLoaderCreater();

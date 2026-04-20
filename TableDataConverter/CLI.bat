@@ -1,0 +1,4 @@
+@echo off
+cd C:\GitHub\TableDataConverter
+dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
+pause
