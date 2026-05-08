@@ -40,10 +40,6 @@ namespace TableDataConverter
             foreach (var item in fileInfos)
             {
                 //
-                if (item.Name.Substring(1, 2) == "00")
-                    continue;
-
-                //
                 var fileName = item.Name.Replace(".xlsx", "");
                 _sb.Append($"        public Dictionary<int, {fileName}.Values> _dic{fileName} = new Dictionary<int, {fileName}.Values>();\r\n");
                 _sb.Append($"        public List<{fileName}.Values> _list{fileName} = new List<{fileName}.Values>();\r\n");
@@ -52,10 +48,6 @@ namespace TableDataConverter
             _sb.Append("        {\r\n");
             foreach (var item in fileInfos)
             {
-                //
-                if (item.Name.Substring(1, 2) == "00")
-                    continue;
-
                 //
                 var fileName = item.Name.Replace(".xlsx", "");
                 _sb.Append($"            var temp{fileName} = JsonConvert.DeserializeObject<List<{fileName}.Values>>(Manager_Addressable.Instance.GetTable(\"Assets/Table/{fileName}.bytes\").text);\r\n");
