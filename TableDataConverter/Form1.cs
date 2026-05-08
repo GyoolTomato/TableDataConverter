@@ -11,6 +11,7 @@ namespace TableDataConverter
         static public string pPathData = string.Empty;
 
         //
+        DefineCreater _dCreater;
         TableDataLoaderCreater _mtCreater;
 
         //
@@ -31,6 +32,7 @@ namespace TableDataConverter
             pPathData = $"{path}\\Assets\\Table";
 
             //
+            _dCreater = new DefineCreater();
             _mtCreater = new TableDataLoaderCreater();
             _sb = new StringBuilder();
 
@@ -82,11 +84,19 @@ namespace TableDataConverter
             foreach (var item in _fileInfos)
             {
                 //
-                var fileName = item.Name.Replace(".xlsx", "");
+                var className = item.Name.Replace(".xlsx", "");
                 var loadData = new XLWorkbook(item.FullName);
 
-                CreateClass(fileName, loadData);
-                CreateData(fileName, loadData);
+                //
+                if (item.Name.Substring(1, 2) == "00")
+                {
+                    _dCreater.Create(className, loadData);
+                }
+                else
+                {
+                    CreateClass(className, loadData);
+                    CreateData(className, loadData);
+                }
             }
 
             //
@@ -99,13 +109,13 @@ namespace TableDataConverter
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="className"></param>
         /// <param name="workBook"></param>
-        void CreateClass(string fileName, XLWorkbook workBook)
+        void CreateClass(string className, XLWorkbook workBook)
         {
             //
 #if !DEBUG
-            var fs = new FileStream($"{pPathScript}\\{fileName}.cs", FileMode.Create, FileAccess.Write);
+            var fs = new FileStream($"{pPathScript}\\{className}.cs", FileMode.Create, FileAccess.Write);
             var sw = new StreamWriter(fs);
 #endif
 
@@ -132,7 +142,7 @@ namespace TableDataConverter
                         break;
                 }
             }
-            var data = ClassCode(fileName, tempVariables);
+            var data = ClassCode(className, tempVariables);
 #if !DEBUG
             sw.Write(data);
             sw.Close();
@@ -194,13 +204,13 @@ namespace TableDataConverter
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="className"></param>
         /// <param name="workBook"></param>
-        void CreateData(string fileName, XLWorkbook workBook)
+        void CreateData(string className, XLWorkbook workBook)
         {
 #if !DEBUG
             //
-            var fs = new FileStream($"{pPathData}\\{fileName}.bytes", FileMode.Create, FileAccess.Write);
+            var fs = new FileStream($"{pPathData}\\{className}.bytes", FileMode.Create, FileAccess.Write);
             var sw = new StreamWriter(fs);
 #endif
 
