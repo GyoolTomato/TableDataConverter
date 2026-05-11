@@ -7,8 +7,9 @@ namespace TableDataConverter
     public partial class Form1 : Form
     {
         //
-        static public string pPathScript = string.Empty;
-        static public string pPathData = string.Empty;
+        static public string pPathGlobalData = string.Empty;
+        static public string pPathScript = string.Empty;        
+        static public string pPathTableData = string.Empty;
 
         //
         TableDataLoaderCreater _mtCreater;
@@ -27,8 +28,10 @@ namespace TableDataConverter
             //
             var path = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
             path = $"{path}\\{new DirectoryInfo(AppContext.BaseDirectory).Name.Replace("Tables", "")}";
+            pPathGlobalData = $"{path}\\Assets\\Scripts\\_Common\\GlobalData";
             pPathScript = $"{path}\\Assets\\Scripts\\_Common\\Tables";
-            pPathData = $"{path}\\Assets\\Tables";
+            pPathTableData = $"{path}\\Assets\\Tables";
+            
 
             //
             _mtCreater = new TableDataLoaderCreater();
@@ -82,11 +85,18 @@ namespace TableDataConverter
             foreach (var item in _fileInfos)
             {
                 //
-                var fileName = item.Name.Replace(".xlsx", "");
+                var className = item.Name.Replace(".xlsx", "");
                 var loadData = new XLWorkbook(item.FullName);
 
-                CreateClass(fileName, loadData);
-                CreateData(fileName, loadData);
+                if (className.Substring(1, 1) == "0")
+                {
+                    CreateEnum(className, loadData);
+                }
+                else
+                {
+                    CreateClass(className, loadData);
+                    CreateData(className, loadData);
+                }                
             }
 
             //
@@ -99,13 +109,72 @@ namespace TableDataConverter
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="className"></param>
         /// <param name="workBook"></param>
-        void CreateClass(string fileName, XLWorkbook workBook)
+        void CreateEnum(string className, XLWorkbook workBook)
+        {
+#if !DEBUG
+            //
+            var fs = new FileStream($"{pPathGlobalData}\\{className}.cs", FileMode.Create, FileAccess.Write);
+            var sw = new StreamWriter(fs);
+#endif
+
+            //
+            var worksheet = workBook.Worksheet(1);
+            var range = worksheet.RangeUsed();
+
+            if (range == null)
+                return;
+
+            var rowCount = range.LastRow().RowNumber();
+            var columnCount = range.LastColumn().ColumnNumber();
+
+            _sb.Clear();
+            var tempVariables = new List<string>();
+
+
+
+            for (int col = 1; col <= columnCount; col++)
+            {
+                for (int row = 2; row <= rowCount; row++)
+                {
+                    var cellValue = worksheet.Cell(row, col).Value;
+                    if (cellValue.IsText)
+                    {
+                        //
+                        var text = worksheet.Cell(row, col).GetText();
+                        if (string.IsNullOrEmpty(text))
+                            continue;
+
+                        //
+                        _sb.AppendFormat(row == 2 ? "public enum E{0}\r\n{{\r\n" : "    {0},\r\n", text);
+                    }
+                }
+                _sb.Append("}\r\n");
+
+                if (col != columnCount)
+                {
+                    _sb.Append("\r\n");
+                }
+            }
+
+#if !DEBUG
+            sw.Write(_sb);
+            sw.Close();
+            fs.Close();
+#endif
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="className"></param>
+        /// <param name="workBook"></param>
+        void CreateClass(string className, XLWorkbook workBook)
         {
             //
 #if !DEBUG
-            var fs = new FileStream($"{pPathScript}\\{fileName}.cs", FileMode.Create, FileAccess.Write);
+            var fs = new FileStream($"{pPathScript}\\{className}.cs", FileMode.Create, FileAccess.Write);
             var sw = new StreamWriter(fs);
 #endif
 
@@ -132,7 +201,7 @@ namespace TableDataConverter
                         break;
                 }
             }
-            var data = ClassCode(fileName, tempVariables);
+            var data = ClassCode(className, tempVariables);
 #if !DEBUG
             sw.Write(data);
             sw.Close();
@@ -146,10 +215,8 @@ namespace TableDataConverter
         /// <param name="name"></param>
         /// <param name="variables"></param>
         /// <returns></returns>
-        string ClassCode(string name, List<KeyValuePair<string, string>> variables)
+        string ClassCode(string className, List<KeyValuePair<string, string>> variables)
         {
-            var className = name.Replace(".xlsx", "");
-
             _sb.Clear();
             _sb.Append($"using System;\r\nusing System.IO;\r\nusing System.Collections.Generic;\r\nusing Newtonsoft.Json;\r\n\r\npublic class {className}\r\n{{");
             _sb.Append("\r\n    public class Values");
@@ -194,13 +261,13 @@ namespace TableDataConverter
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="className"></param>
         /// <param name="workBook"></param>
-        void CreateData(string fileName, XLWorkbook workBook)
+        void CreateData(string className, XLWorkbook workBook)
         {
 #if !DEBUG
             //
-            var fs = new FileStream($"{pPathData}\\{fileName}.bytes", FileMode.Create, FileAccess.Write);
+            var fs = new FileStream($"{pPathTableData}\\{className}.bytes", FileMode.Create, FileAccess.Write);
             var sw = new StreamWriter(fs);
 #endif
 

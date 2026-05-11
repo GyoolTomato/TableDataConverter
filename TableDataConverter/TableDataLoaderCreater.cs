@@ -40,21 +40,33 @@ namespace TableDataConverter
             foreach (var item in fileInfos)
             {
                 //
-                var fileName = item.Name.Replace(".xlsx", "");
-                _sb.Append($"        public Dictionary<int, {fileName}.Values> _dic{fileName} = new Dictionary<int, {fileName}.Values>();\r\n");
-                _sb.Append($"        public List<{fileName}.Values> _list{fileName} = new List<{fileName}.Values>();\r\n");
+                if (item.Name.Substring(1,1) == "0")
+                {
+                    continue;
+                }
+
+                //
+                var className = item.Name.Replace(".xlsx", "");
+                _sb.Append($"        public Dictionary<int, {className}.Values> _dic{className} = new Dictionary<int, {className}.Values>();\r\n");
+                _sb.Append($"        public List<{className}.Values> _list{className} = new List<{className}.Values>();\r\n");
             }
             _sb.Append("\r\n\r\n        public void Init()\r\n");
             _sb.Append("        {\r\n");
             foreach (var item in fileInfos)
             {
                 //
-                var fileName = item.Name.Replace(".xlsx", "");
-                _sb.Append($"            var temp{fileName} = JsonConvert.DeserializeObject<List<{fileName}.Values>>(Manager_Addressable.Instance.GetTable(\"Assets/Tables/{fileName}.bytes\").text);\r\n");
-                _sb.Append($"            foreach (var item in temp{fileName})\r\n");
+                if (item.Name.Substring(1, 1) == "0")
+                {
+                    continue;
+                }
+
+                //
+                var className = item.Name.Replace(".xlsx", "");
+                _sb.Append($"            var temp{className} = JsonConvert.DeserializeObject<List<{className}.Values>>(Manager_Addressable.Instance.GetTable(\"Assets/Tables/{className}.bytes\").text);\r\n");
+                _sb.Append($"            foreach (var item in temp{className})\r\n");
                 _sb.Append("            {\r\n");
-                _sb.Append($"                _list{fileName}.Add(item);\r\n");
-                _sb.Append($"                _dic{fileName}.Add(item.key, item);\r\n");
+                _sb.Append($"                _list{className}.Add(item);\r\n");
+                _sb.Append($"                _dic{className}.Add(item.key, item);\r\n");
                 _sb.Append("            }\r\n");
             }
             _sb.Append("        }\r\n\r\n");
