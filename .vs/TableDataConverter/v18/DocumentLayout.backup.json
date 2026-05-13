@@ -3,28 +3,40 @@
   "WorkspaceRootPath": "C:\\GitHub\\TableDataConverter\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|c:\\github\\tabledataconverter\\tabledataconverter\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|solutionrelative:tabledataconverter\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|c:\\github\\tabledataconverter\\tabledataconverter\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|solutionrelative:tabledataconverter\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|c:\\github\\tabledataconverter\\tabledataconverter\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|solutionrelative:tabledataconverter\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|c:\\github\\tabledataconverter\\tabledataconverter\\tabledataloadercreater.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|solutionrelative:tabledataconverter\\tabledataloadercreater.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|c:\\github\\tabledataconverter\\tabledataconverter\\tabledataconverter.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|solutionrelative:tabledataconverter\\tabledataconverter.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|c:\\github\\tabledataconverter\\tabledataconverter\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|solutionrelative:tabledataconverter\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|c:\\github\\tabledataconverter\\tabledataconverter\\cli.bat||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|solutionrelative:tabledataconverter\\cli.bat||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|c:\\github\\tabledataconverter\\tabledataconverter\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|solutionrelative:tabledataconverter\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|c:\\github\\tabledataconverter\\tabledataconverter\\form1.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}",
+      "RelativeMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|solutionrelative:tabledataconverter\\form1.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|c:\\github\\tabledataconverter\\tabledataconverter\\tabledataconverter.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
       "RelativeMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|solutionrelative:tabledataconverter\\tabledataconverter.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|c:\\github\\tabledataconverter\\tabledataconverter\\tabledataconverter.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|solutionrelative:tabledataconverter\\tabledataconverter.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|c:\\github\\tabledataconverter\\tabledataconverter\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{36FB06FD-0222-4879-B0BA-718798094652}|TableDataConverter\\TableDataConverter.csproj|solutionrelative:tabledataconverter\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,50 +46,84 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CLI.bat",
+              "DocumentMoniker": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\CLI.bat",
+              "RelativeDocumentMoniker": "TableDataConverter\\CLI.bat",
+              "ToolTip": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\CLI.bat",
+              "RelativeToolTip": "TableDataConverter\\CLI.bat",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd\u002BUAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAL1SURBVEhL7ZZLaFRXGMd/92auIZNJ0nllkiGmhmiIGvMwPqoLbbU\u002BFtKIiIKgqODe0kiMIIqgG8GVIKi4Elq6qyJaKNRSirVWYzJtfIOQ1\u002BiM88yd8c69d0530jnUa4zRhfS3/L7vf34czjlw4EMihJBLHx/K0iXdq4EuufGeGFD6\u002B3oHhRCL5M674HJpzJ7dSCqdpEwtw\u002B3x8GxiHMMwhpT\u002Bvl6xa/feGT1MVVWp8lRhFAwURUHTNHRd58L5syj9fb3i6LHjMyp8HUcOH0KVizJCCIQQxBIpfrk5yI\u002B/3kLP51/V3xZHoRCCZCZLPJHmRSJDdjJHPpdndCJGPJFmLBrHtm055oijMJc3uDX4gJt3h3n8dASzUMC2bf6\u002B/4TrN24z8Nc94omUHHPEUVgwTVQFTNNEIAjX\u002BQmHApi2hWUVUARYM7nDKo\u002BbhvpabNvG466gpamRjgXzUAQU7SLBgJfagE\u002BOOeIoNAyT8ehzLMsim80yMhFlZCyKWTCxLItoLE4ylZFjjjgKM7pO7EWCYtEmM6kTGX7EH3cjGJaBZVlkMlkSybQcc8RRGPJ7aW1uIuj34fukGtM0MY0Cvpoa5jSGCQa8KCoMRIaZ1PUpPRVHoaqqdLa1sG7VclrnNuGpdKPNcrF8cRudC1uZ01DP9d9ucOHit/z\u002B5x0ePnrCy5eGvEwJjsJ/U1frp7t9AUs62ggG/Hx/6QrnLn7H2Ng4Qb\u002BPaz/9zKnTZxi\u002B/0COljBlobuigqZPG5jf0oyrrIxqjwdEkWVdnWzf8hVBv5fyWRqVlW45WsKUhTK5nI5lmrhcKt6aahQhmMxmSKWS8mgJ0xY\u002Bj8XJptJcunKVEydPERmKkEwmSL7h1k5buGfHdvbt2Uk4VMvo6CgbN6zjwNf7\u002BXLN5/JoCdMWhuvrWNzRzvq1a9ixbStrv1jNyhWfoWmaPFrCtIUA5eXlLFvazZbNPdSFQnL7P1EO9n0zuGlTz4x\u002BMV7H5cs/DH3QT5SAAbn2P\u002B/MP4IjNAdHaduqAAAAAElFTkSuQmCC",
+              "WhenOpened": "2026-05-13T15:53:43.68Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Form1.resx",
+              "DocumentMoniker": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Form1.resx",
+              "RelativeDocumentMoniker": "TableDataConverter\\Form1.resx",
+              "ToolTip": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Form1.resx",
+              "RelativeToolTip": "TableDataConverter\\Form1.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2026-05-13T15:53:47.993Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "Form1.cs [Design]",
+              "DocumentMoniker": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Form1.cs",
+              "RelativeDocumentMoniker": "TableDataConverter\\Form1.cs",
+              "ToolTip": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Form1.cs [Design]",
+              "RelativeToolTip": "TableDataConverter\\Form1.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-13T15:53:44.89Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "Form1.Designer.cs",
               "DocumentMoniker": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Form1.Designer.cs",
               "RelativeDocumentMoniker": "TableDataConverter\\Form1.Designer.cs",
               "ToolTip": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Form1.Designer.cs",
               "RelativeToolTip": "TableDataConverter\\Form1.Designer.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAIAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-11T07:49:38.681Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-11T07:49:38.681Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Program.cs",
+              "RelativeDocumentMoniker": "TableDataConverter\\Program.cs",
+              "ToolTip": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Program.cs",
+              "RelativeToolTip": "TableDataConverter\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-19T17:36:03.951Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Program.cs",
-              "RelativeDocumentMoniker": "TableDataConverter\\Program.cs",
-              "ToolTip": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Program.cs*",
-              "RelativeToolTip": "TableDataConverter\\Program.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAA9AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-19T17:36:03.951Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "Form1.cs",
               "DocumentMoniker": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Form1.cs",
               "RelativeDocumentMoniker": "TableDataConverter\\Form1.cs",
               "ToolTip": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Form1.cs",
               "RelativeToolTip": "TableDataConverter\\Form1.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAOAAAAAAAAAA==",
+              "ViewState": "AgIAAJUAAAAAAAAAAAAAALQAAABPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-05T19:13:46.431Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "TableDataLoaderCreater.cs",
               "DocumentMoniker": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\TableDataLoaderCreater.cs",
               "RelativeDocumentMoniker": "TableDataConverter\\TableDataLoaderCreater.cs",
@@ -90,7 +136,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "TableDataConverter",
               "DocumentMoniker": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\TableDataConverter.csproj",
               "RelativeDocumentMoniker": "TableDataConverter\\TableDataConverter.csproj",
@@ -101,7 +147,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "TableDataConverter.csproj",
               "DocumentMoniker": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\TableDataConverter.csproj",
               "RelativeDocumentMoniker": "TableDataConverter\\TableDataConverter.csproj",
@@ -109,8 +155,11 @@
               "RelativeToolTip": "TableDataConverter\\TableDataConverter.csproj",
               "ViewState": "AgIAAAIAAAAAAAAAAADgvzIAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-01-12T21:16:18.003Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-12T21:16:18.003Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             }
           ]
         }

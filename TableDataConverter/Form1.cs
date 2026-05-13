@@ -1,5 +1,6 @@
 using ClosedXML.Excel;
 using System.Configuration;
+using System.Reflection.Emit;
 using System.Text;
 
 namespace TableDataConverter
@@ -8,7 +9,7 @@ namespace TableDataConverter
     {
         //
         static public string pPathGlobalData = string.Empty;
-        static public string pPathScript = string.Empty;        
+        static public string pPathScript = string.Empty;
         static public string pPathTableData = string.Empty;
 
         //
@@ -31,13 +32,30 @@ namespace TableDataConverter
             pPathGlobalData = $"{path}\\Assets\\Scripts\\_Common\\GlobalData";
             pPathScript = $"{path}\\Assets\\Scripts\\_Common\\Tables";
             pPathTableData = $"{path}\\Assets\\Tables";
-            
+
 
             //
             _mtCreater = new TableDataLoaderCreater();
             _sb = new StringBuilder();
 
+            RefreshFileInfosWithList();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        void RefreshFileInfosWithList()
+        {
+            //
             RefreshFileInfos();
+
+            //
+            listBox1.SelectionMode = SelectionMode.None;
+            listBox1.Items.Clear();
+            foreach (var item in _fileInfos)
+            {
+                listBox1.Items.Add(item.Name);
+            }
         }
 
         /// <summary>
@@ -69,9 +87,11 @@ namespace TableDataConverter
         /// <param name="e"></param>
         private void OnBtn_Refresh(object sender, EventArgs e)
         {
-            RefreshFileInfos();
+            //
+            RefreshFileInfosWithList();
 
-            MessageBox.Show($"갱신");
+            //
+            label1.Text = $"Refresh complete";
         }
 
         /// <summary>
@@ -81,6 +101,13 @@ namespace TableDataConverter
         /// <param name="e"></param>
         private void OnBtn_Confirm(object sender, EventArgs e)
         {
+            //
+            button1.Enabled = false;
+            button2.Enabled = false;
+
+            //
+            label1.Text = $"Converting...";
+
             //
             foreach (var item in _fileInfos)
             {
@@ -96,14 +123,18 @@ namespace TableDataConverter
                 {
                     CreateClass(className, loadData);
                     CreateData(className, loadData);
-                }                
+                }
             }
 
             //
             _mtCreater.Create(_fileInfos);
 
             //
-            MessageBox.Show($"완료");
+            label1.Text = $"Convert complete";
+
+            //
+            button1.Enabled = true;
+            button2.Enabled = true;
         }
 
         /// <summary>
@@ -147,9 +178,10 @@ namespace TableDataConverter
                             continue;
 
                         //
-                        _sb.AppendFormat(row == 2 ? "public enum E{0}\r\n{{\r\n" : "    {0},\r\n", text);
+                        _sb.AppendFormat(row == 2 ? "public enum E{0}\r\n{{\r\n    None,\r\n" : "    {0},\r\n", text);
                     }
                 }
+                _sb.Append("    End\r\n");
                 _sb.Append("}\r\n");
 
                 if (col != columnCount)
@@ -279,7 +311,7 @@ namespace TableDataConverter
                 return;
 
             var rowCount = range.LastRow().RowNumber();
-            var columnCount = range.LastColumn().ColumnNumber();            
+            var columnCount = range.LastColumn().ColumnNumber();
 
             _sb.Clear();
             _sb.Append("[");
@@ -340,11 +372,6 @@ namespace TableDataConverter
             var temp = string.Format("\"{0}\":{1}", name, value);
 
             return temp;
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
