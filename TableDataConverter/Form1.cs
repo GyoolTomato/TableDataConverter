@@ -231,6 +231,10 @@ namespace TableDataConverter
                         var temp = new KeyValuePair<string, string>(key, worksheet.Cell(2, col).Value.GetText());
                         tempVariables.Add(temp);
                         break;
+                    default:
+                        var temp = new KeyValuePair<string, string>(key, string.Format($"{key}.{}" worksheet.Cell(2, col).Value.GetText());
+                        tempVariables.Add(temp);
+                        break;
                 }
             }
             var data = ClassCode(className, tempVariables);
