@@ -254,6 +254,12 @@ namespace TableDataConverter
                 var tempVariables = new List<KeyValuePair<string, string>>();
                 for (int col = 1; col <= range.ColumnCount(); col++)
                 {
+                    //
+                    var variableName = worksheet.Cell(2, col).GetText();
+                    if (variableName.Substring(0, 1) == ".")
+                        continue;
+
+                    //
                     var temp = new KeyValuePair<string, string>();
                     var key = worksheet.Cell(3, col).Value.GetText();
                     switch (key)
@@ -263,7 +269,7 @@ namespace TableDataConverter
                         case "double":
                         case "float":
                         case "string":
-                            temp = new KeyValuePair<string, string>(key, worksheet.Cell(2, col).Value.GetText());
+                            temp = new KeyValuePair<string, string>(key, variableName);
                             tempVariables.Add(temp);
                             break;
                     }
@@ -367,17 +373,24 @@ namespace TableDataConverter
                 {
                     _sb.Append("{");
                     for (int col = 1; col <= columnCount; col++)
-                    {
-                        var cellValue = worksheet.Cell(row, col).Value;
+                    {             
+                        //
+                        var variableName = worksheet.Cell(2, col).GetText();
+                        if (variableName.Substring(0, 1) == ".")
+                            continue;
 
-                        _sb.Append(cellValue.IsText ?
-                            DataCode(worksheet.Cell(2, col).GetText(), cellValue.GetText()) :
-                            DataCode(worksheet.Cell(2, col).GetText(), cellValue.GetNumber()));
-
-                        if (col < columnCount)
+                        //
+                        if (col > 1)
                         {
                             _sb.Append(",");
                         }
+
+                        //
+                        var cellValue = worksheet.Cell(row, col).Value;
+
+                        _sb.Append(cellValue.IsText ?
+                            DataCode(variableName, cellValue.GetText()) :
+                            DataCode(variableName, cellValue.GetNumber()));
                     }
                     _sb.Append("}");
 
