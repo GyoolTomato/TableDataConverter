@@ -1,4 +1,5 @@
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
 using System.Configuration;
 using System.Reflection.Emit;
 using System.Text;
@@ -112,22 +113,44 @@ namespace TableDataConverter
             foreach (var item in _fileInfos)
             {
                 //
-                var className = item.Name.Replace(".xlsx", "");
-                var loadData = new XLWorkbook(item.FullName);
+                var fileName = item.Name.Replace(".xlsx", "");
+                var workBook = new XLWorkbook(item.FullName);
 
-                if (className.Substring(1, 1) == "0")
+                //
+                if (fileName.Substring(1, 1) == "0")
                 {
-                    CreateEnum(className, loadData);
+                    CreateEnum(fileName, workBook);
                 }
                 else
                 {
-                    CreateClass(className, loadData);
-                    CreateData(className, loadData);
+                    CreateClass(fileName, workBook);
+                    CreateData(fileName, workBook);
                 }
             }
 
             //
-            _mtCreater.Create(_fileInfos);
+            var classNames = new List<string>();
+            foreach (var item in _fileInfos)
+            {
+                //
+                var fileName = item.Name.Replace(".xlsx", "");
+                var workBook = new XLWorkbook(item.FullName);
+
+                //
+                var totalSheetCount = workBook.Worksheets.Count;
+                IXLWorksheet? worksheet = null;
+
+                for (int i = 0; i < totalSheetCount; i++)
+                {
+                    //
+                    worksheet = workBook.Worksheet(i + 1);
+                    if (worksheet == null)
+                        continue;
+
+                    classNames.Add(worksheet.Name == "Data" ? fileName : $"{fileName}_{worksheet.Name}");
+                }
+            }
+            _mtCreater.Create(classNames);
 
             //
             label1.Text = $"Convert complete";
@@ -202,47 +225,56 @@ namespace TableDataConverter
         /// </summary>
         /// <param name="className"></param>
         /// <param name="workBook"></param>
-        void CreateClass(string className, XLWorkbook workBook)
+        void CreateClass(string fileName, XLWorkbook workBook)
         {
             //
-#if !DEBUG
-            var fs = new FileStream($"{pPathScript}\\{className}.cs", FileMode.Create, FileAccess.Write);
-            var sw = new StreamWriter(fs);
-#endif
-
-            //
-            var worksheet = workBook.Worksheet(1);
-            var range = worksheet.RangeUsed();
-
-            if (range == null)
-                return;
-
-            var tempVariables = new List<KeyValuePair<string, string>>();
-            for (int col = 1; col <= range.ColumnCount(); col++)
+            var totalSheetCount = workBook.Worksheets.Count;
+            IXLWorksheet? worksheet = null;
+            IXLRange? range = null;
+            for (int i = 0; i < totalSheetCount; i++)
             {
-                var key = worksheet.Cell(3, col).Value.GetText();
-                switch (key)
-                {
-                    case "int":
-                    case "long":
-                    case "double":
-                    case "float":
-                    case "string":
-                        var temp = new KeyValuePair<string, string>(key, worksheet.Cell(2, col).Value.GetText());
-                        tempVariables.Add(temp);
-                        break;
-                    default:
-                        var temp = new KeyValuePair<string, string>(key, string.Format($"{key}.{}" worksheet.Cell(2, col).Value.GetText());
-                        tempVariables.Add(temp);
-                        break;
-                }
-            }
-            var data = ClassCode(className, tempVariables);
-#if !DEBUG
-            sw.Write(data);
-            sw.Close();
-            fs.Close();
+                //
+                worksheet = workBook.Worksheet(i + 1);
+                if (worksheet == null)
+                    continue;
+
+                range = worksheet.RangeUsed();
+
+                //
+                var className = worksheet.Name == "Data" ? fileName : $"{fileName}_{worksheet.Name}";
+#if !DEBUG                
+                var fs = new FileStream($"{pPathScript}\\{className}.cs", FileMode.Create, FileAccess.Write);
+                var sw = new StreamWriter(fs);
 #endif
+
+
+                if (range == null)
+                    return;
+
+                var tempVariables = new List<KeyValuePair<string, string>>();
+                for (int col = 1; col <= range.ColumnCount(); col++)
+                {
+                    var temp = new KeyValuePair<string, string>();
+                    var key = worksheet.Cell(3, col).Value.GetText();
+                    switch (key)
+                    {
+                        case "int":
+                        case "long":
+                        case "double":
+                        case "float":
+                        case "string":
+                            temp = new KeyValuePair<string, string>(key, worksheet.Cell(2, col).Value.GetText());
+                            tempVariables.Add(temp);
+                            break;
+                    }
+                }
+                var data = ClassCode(className, tempVariables);
+#if !DEBUG
+                sw.Write(data);
+                sw.Close();
+                fs.Close();
+#endif
+            }
         }
 
         /// <summary>

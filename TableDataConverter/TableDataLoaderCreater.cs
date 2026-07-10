@@ -15,7 +15,7 @@ namespace TableDataConverter
         /// 
         /// </summary>
         /// <param name="fileInfos"></param>
-        public void Create(List<FileInfo> fileInfos)
+        public void Create(List<string> classNames)
         {
             if (_sb == null)
                 _sb = new StringBuilder();
@@ -37,31 +37,31 @@ namespace TableDataConverter
             _sb.Append("{\r\n");
             _sb.Append("    public class TableDataLoader : Singleton<TableDataLoader>\r\n");
             _sb.Append("    {\r\n");
-            foreach (var item in fileInfos)
+            foreach (var item in classNames)
             {
                 //
-                if (item.Name.Substring(1,1) == "0")
+                if (item.Substring(1,1) == "0")
                 {
                     continue;
                 }
 
                 //
-                var className = item.Name.Replace(".xlsx", "");
+                var className = item.Replace(".xlsx", "");
                 _sb.Append($"        public Dictionary<int, {className}.Values> _dic{className} = new Dictionary<int, {className}.Values>();\r\n");
                 _sb.Append($"        public List<{className}.Values> _list{className} = new List<{className}.Values>();\r\n");
             }
             _sb.Append("\r\n\r\n        public void Init()\r\n");
             _sb.Append("        {\r\n");
-            foreach (var item in fileInfos)
+            foreach (var item in classNames)
             {
                 //
-                if (item.Name.Substring(1, 1) == "0")
+                if (item.Substring(1, 1) == "0")
                 {
                     continue;
                 }
 
                 //
-                var className = item.Name.Replace(".xlsx", "");
+                var className = item.Replace(".xlsx", "");
                 _sb.Append($"            var temp{className} = JsonConvert.DeserializeObject<List<{className}.Values>>(Manager_Addressable.Instance.GetTable(\"Assets/Tables/{className}.bytes\").text);\r\n");
                 _sb.Append($"            foreach (var item in temp{className})\r\n");
                 _sb.Append("            {\r\n");
