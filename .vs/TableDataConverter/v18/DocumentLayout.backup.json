@@ -70,20 +70,19 @@
               "ToolTip": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Form1.resx",
               "RelativeToolTip": "TableDataConverter\\Form1.resx",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
-              "WhenOpened": "2026-05-13T15:53:47.993Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-13T15:53:47.993Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "Form1.cs [\uB514\uC790\uC778]",
+              "Title": "Form1.cs [Design]",
               "DocumentMoniker": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Form1.cs",
               "RelativeDocumentMoniker": "TableDataConverter\\Form1.cs",
-              "ToolTip": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Form1.cs [\uB514\uC790\uC778]",
-              "RelativeToolTip": "TableDataConverter\\Form1.cs [\uB514\uC790\uC778]",
+              "ToolTip": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Form1.cs [Design]",
+              "RelativeToolTip": "TableDataConverter\\Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-13T15:53:44.89Z",
-              "EditorCaption": " [\uB514\uC790\uC778]"
+              "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
@@ -95,8 +94,7 @@
               "RelativeToolTip": "TableDataConverter\\Form1.Designer.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwAIAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-11T07:49:38.681Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-11T07:49:38.681Z"
             },
             {
               "$type": "Document",
@@ -118,7 +116,7 @@
               "RelativeDocumentMoniker": "TableDataConverter\\Form1.cs",
               "ToolTip": "C:\\GitHub\\TableDataConverter\\TableDataConverter\\Form1.cs",
               "RelativeToolTip": "TableDataConverter\\Form1.cs",
-              "ViewState": "AgIAAG4AAAAAAAAAAAASwJgAAAAkAAAAAAAAAA==",
+              "ViewState": "AgIAAOAAAAAAAAAAAAASwJgAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-05T19:13:46.431Z",
               "EditorCaption": ""

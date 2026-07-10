@@ -247,7 +247,7 @@ namespace TableDataConverter
                 var sw = new StreamWriter(fs);
 #endif
 
-
+                //
                 if (range == null)
                     return;
 
@@ -331,57 +331,69 @@ namespace TableDataConverter
         /// </summary>
         /// <param name="className"></param>
         /// <param name="workBook"></param>
-        void CreateData(string className, XLWorkbook workBook)
+        void CreateData(string fileName, XLWorkbook workBook)
         {
-#if !DEBUG
             //
-            var fs = new FileStream($"{pPathTableData}\\{className}.bytes", FileMode.Create, FileAccess.Write);
-            var sw = new StreamWriter(fs);
+            var totalSheetCount = workBook.Worksheets.Count;
+            IXLWorksheet? worksheet = null;
+            IXLRange? range = null;
+            for (int i = 0; i < totalSheetCount; i++)
+            {
+                //
+                worksheet = workBook.Worksheet(i + 1);
+                if (worksheet == null)
+                    continue;
+
+                range = worksheet.RangeUsed();
+
+                //
+                var className = worksheet.Name == "Data" ? fileName : $"{fileName}_{worksheet.Name}";
+#if !DEBUG
+                var fs = new FileStream($"{pPathTableData}\\{className}.bytes", FileMode.Create, FileAccess.Write);
+                var sw = new StreamWriter(fs);
 #endif
 
-            //
-            var worksheet = workBook.Worksheet(1);
-            var range = worksheet.RangeUsed();
+                //
+                if (range == null)
+                    return;
 
-            if (range == null)
-                return;
+                var rowCount = range.LastRow().RowNumber();
+                var columnCount = range.LastColumn().ColumnNumber();
 
-            var rowCount = range.LastRow().RowNumber();
-            var columnCount = range.LastColumn().ColumnNumber();
-
-            _sb.Clear();
-            _sb.Append("[");
-            var tempVariables = new List<string>();
-            for (int row = 4; row <= rowCount; row++)
-            {
-                _sb.Append("{");
-                for (int col = 1; col <= columnCount; col++)
+                _sb.Clear();
+                _sb.Append("[");
+                var tempVariables = new List<string>();
+                for (int row = 4; row <= rowCount; row++)
                 {
-                    var cellValue = worksheet.Cell(row, col).Value;
+                    _sb.Append("{");
+                    for (int col = 1; col <= columnCount; col++)
+                    {
+                        var cellValue = worksheet.Cell(row, col).Value;
 
-                    _sb.Append(cellValue.IsText ?
-                        DataCode(worksheet.Cell(2, col).GetText(), cellValue.GetText()) :
-                        DataCode(worksheet.Cell(2, col).GetText(), cellValue.GetNumber()));
+                        _sb.Append(cellValue.IsText ?
+                            DataCode(worksheet.Cell(2, col).GetText(), cellValue.GetText()) :
+                            DataCode(worksheet.Cell(2, col).GetText(), cellValue.GetNumber()));
 
-                    if (col < columnCount)
+                        if (col < columnCount)
+                        {
+                            _sb.Append(",");
+                        }
+                    }
+                    _sb.Append("}");
+
+                    if (row < rowCount)
                     {
                         _sb.Append(",");
                     }
                 }
-                _sb.Append("}");
-
-                if (row < rowCount)
-                {
-                    _sb.Append(",");
-                }
-            }
-            _sb.Append("]");
+                _sb.Append("]");
 
 #if !DEBUG
-            sw.Write(_sb);
-            sw.Close();
-            fs.Close();
+                sw.Write(_sb);
+                sw.Close();
+                fs.Close();
 #endif
+            }
         }
 
         /// <summary>
