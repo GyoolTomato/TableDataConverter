@@ -272,6 +272,14 @@ namespace TableDataConverter
                             temp = new KeyValuePair<string, string>(key, variableName);
                             tempVariables.Add(temp);
                             break;
+                        default:
+                            var firstString = key.Substring(0, 1);
+                            if (firstString == "E")
+                            {
+                                temp = new KeyValuePair<string, string>(key, variableName);
+                                tempVariables.Add(temp);
+                            }
+                            break;
                     }
                 }
                 var data = ClassCode(className, tempVariables);
