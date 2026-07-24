@@ -55,7 +55,7 @@ namespace TableDataConverter
             foreach (var item in classNames)
             {
                 //
-                if (item.Substring(1, 1) == "0")
+                if (item.Substring(1, 1) == "0" || item.Substring(1, 3) == "999")
                 {
                     continue;
                 }

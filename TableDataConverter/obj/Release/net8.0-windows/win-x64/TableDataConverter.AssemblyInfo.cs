@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TableDataConverter")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a44372f475ea9541d984beac11042d9cec6ae677")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+88c8adc1b0b0c750557ac56a124b63a9a0acb0c2")]
 [assembly: System.Reflection.AssemblyProductAttribute("TableDataConverter")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TableDataConverter")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

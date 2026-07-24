@@ -1,8 +1,11 @@
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System.Configuration;
+using System.Globalization;
 using System.Reflection.Emit;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace TableDataConverter
 {
@@ -12,6 +15,7 @@ namespace TableDataConverter
         static public string pPathGlobalData = string.Empty;
         static public string pPathScript = string.Empty;
         static public string pPathTableData = string.Empty;
+        static public string pPathTableLocalData = string.Empty;
 
         //
         TableDataLoaderCreater _mtCreater;
@@ -33,6 +37,7 @@ namespace TableDataConverter
             pPathGlobalData = $"{path}\\Assets\\Scripts\\_Common\\GlobalData";
             pPathScript = $"{path}\\Assets\\Scripts\\_Common\\Tables";
             pPathTableData = $"{path}\\Assets\\Tables";
+            pPathTableLocalData = $"{path}\\Assets\\Resources\\Tables";
 
 
             //
@@ -117,14 +122,15 @@ namespace TableDataConverter
                 var workBook = new XLWorkbook(item.FullName);
 
                 //
-                if (fileName.Substring(1, 1) == "0")
+                var numberName = fileName.Substring(1, 3);
+                if (numberName[0] == '0')
                 {
                     CreateEnum(fileName, workBook);
                 }
                 else
                 {
                     CreateClass(fileName, workBook);
-                    CreateData(fileName, workBook);
+                    CreateData(fileName, workBook, numberName == "999");
                 }
             }
 
@@ -252,35 +258,40 @@ namespace TableDataConverter
                     return;
 
                 var tempVariables = new List<KeyValuePair<string, string>>();
-                for (int col = 1; col <= range.ColumnCount(); col++)
+                var arrayKeys = new List<string>();
+                var isArray = false;
+                for (int col = 1;  col <= range.ColumnCount();    col++)
                 {
-                    //
+                    //                    
+                    isArray = false;
                     var variableName = worksheet.Cell(2, col).GetText();
+
+                    //
                     if (variableName.Substring(0, 1) == ".")
                         continue;
 
                     //
-                    var temp = new KeyValuePair<string, string>();
-                    var key = worksheet.Cell(3, col).Value.GetText();
-                    switch (key)
+                    if (variableName.Substring(0, 1) == "[")
                     {
-                        case "int":
-                        case "long":
-                        case "double":
-                        case "float":
-                        case "string":
-                            temp = new KeyValuePair<string, string>(key, variableName);
-                            tempVariables.Add(temp);
-                            break;
-                        default:
-                            var firstString = key.Substring(0, 1);
-                            if (firstString == "E")
-                            {
-                                temp = new KeyValuePair<string, string>(key, variableName);
-                                tempVariables.Add(temp);
-                            }
-                            break;
+                        if (arrayKeys.Contains(variableName))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            arrayKeys.Add(variableName);
+                            variableName = variableName.Substring(1, variableName.Length - 2);
+                            isArray = true;
+                        }
                     }
+
+                    //
+                    var dataType = worksheet.Cell(3, col).Value.GetText();
+                    dataType += isArray ? "[]" : "";
+
+                    //
+                    var temp = new KeyValuePair<string, string>(dataType, variableName);
+                    tempVariables.Add(temp);
                 }
                 var data = ClassCode(className, tempVariables);
 #if !DEBUG
@@ -341,106 +352,242 @@ namespace TableDataConverter
         }
 
         /// <summary>
-        /// 
+        /// 엑셀 워크북의 각 시트를 JSON 파일로 변환한다.
+        /// 2행: 변수명
+        /// 3행: 자료형
+        /// 4행 이후: 데이터
+        /// [name] 형태로 반복되는 열은 JSON 배열로 변환한다.
         /// </summary>
-        /// <param name="className"></param>
-        /// <param name="workBook"></param>
-        void CreateData(string fileName, XLWorkbook workBook)
+        void CreateData(string fileName, XLWorkbook workBook, bool isLocal)
         {
-            //
-            var totalSheetCount = workBook.Worksheets.Count;
-            IXLWorksheet? worksheet = null;
-            IXLRange? range = null;
-            for (int i = 0; i < totalSheetCount; i++)
+            var path = isLocal ? pPathTableLocalData : pPathTableData;
+
+            foreach (var worksheet in workBook.Worksheets)
             {
-                //
-                worksheet = workBook.Worksheet(i + 1);
-                if (worksheet == null)
-                    continue;
+                var range = worksheet.RangeUsed();
 
-                range = worksheet.RangeUsed();
-
-                //
-                var className = worksheet.Name == "Data" ? fileName : $"{fileName}_{worksheet.Name}";
-#if !DEBUG
-                var fs = new FileStream($"{pPathTableData}\\{className}.bytes", FileMode.Create, FileAccess.Write);
-                var sw = new StreamWriter(fs);
-#endif
-
-                //
                 if (range == null)
-                    return;
+                    continue;
 
                 var rowCount = range.LastRow().RowNumber();
                 var columnCount = range.LastColumn().ColumnNumber();
 
-                _sb.Clear();
-                _sb.Append("[");
-                var tempVariables = new List<string>();
+                var className = worksheet.Name == "Data"
+                    ? fileName
+                    : $"{fileName}_{worksheet.Name}";
+
+                var root = new JsonArray();
+
                 for (int row = 4; row <= rowCount; row++)
                 {
-                    _sb.Append("{");
-                    for (int col = 1; col <= columnCount; col++)
-                    {             
-                        //
-                        var variableName = worksheet.Cell(2, col).GetText();
-                        if (variableName.Substring(0, 1) == ".")
-                            continue;
+                    // 완전히 비어 있는 행은 제외
+                    if (worksheet.Row(row).Cells(1, columnCount)
+                        .All(cell => cell.IsEmpty()))
+                    {
+                        continue;
+                    }
 
-                        //
-                        if (col > 1)
+                    var jsonObject = new JsonObject();
+
+                    for (int col = 1; col <= columnCount;)
+                    {
+                        var header = worksheet.Cell(2, col).GetText().Trim();
+
+                        // 헤더가 없거나 "."으로 시작하는 열은 제외
+                        if (string.IsNullOrEmpty(header) ||
+                            header.StartsWith(".", StringComparison.Ordinal))
                         {
-                            _sb.Append(",");
+                            col++;
+                            continue;
                         }
 
-                        //
-                        var cellValue = worksheet.Cell(row, col).Value;
+                        if (TryGetArrayName(header, out var arrayName))
+                        {
+                            var array = new JsonArray();
+                            var arrayTypeName = string.Empty;
+                            var typeName = worksheet.Cell(3, col).GetText().Trim();                            
 
-                        _sb.Append(cellValue.IsText ?
-                            DataCode(variableName, cellValue.GetText()) :
-                            DataCode(variableName, cellValue.GetNumber()));
-                    }
-                    _sb.Append("}");
+                            while (col <= columnCount)
+                            {
+                                var currentHeader = worksheet.Cell(2, col).GetText().Trim();
 
-                    if (row < rowCount)
-                    {
-                        _sb.Append(",");
+                                if (!TryGetArrayName(currentHeader, out var currentArrayName) ||
+                                    !string.Equals(arrayName, currentArrayName, StringComparison.Ordinal))
+                                {
+                                    break;
+                                }
+
+                                var declaredTypeName =
+                                    worksheet.Cell(3, col).GetText().Trim();
+
+                                // 자료형이 선언된 열에서만 갱신한다.
+                                // 이후 빈칸은 이전 자료형을 그대로 사용한다.
+                                if (!string.IsNullOrWhiteSpace(declaredTypeName))
+                                {
+                                    arrayTypeName = declaredTypeName;
+                                }
+
+                                if (string.IsNullOrWhiteSpace(arrayTypeName))
+                                {
+                                    throw new InvalidDataException(
+                                        $"{worksheet.Name} 시트의 {col}열 배열 자료형을 알 수 없습니다.");
+                                }
+
+                                array.Add(ConvertCellToJson(
+                                    worksheet.Cell(row, col),
+                                    arrayTypeName));
+
+                                col++;
+                            }
+
+                            jsonObject[arrayName] = array;
+                            continue;
+                        }
+
+                        var scalarTypeName =
+                            worksheet.Cell(3, col).GetText().Trim();
+
+                        jsonObject[header] = ConvertCellToJson(
+                            worksheet.Cell(row, col),
+                            scalarTypeName);
+
+                        col++;
                     }
+
+                    root.Add(jsonObject);
                 }
-                _sb.Append("]");
+
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                };
+
+                var json = root.ToJsonString(options);
 
 #if !DEBUG
-                sw.Write(_sb);
-                sw.Close();
-                fs.Close();
+        Directory.CreateDirectory(path);
+
+        var outputPath = Path.Combine(path, $"{className}.bytes");
+
+        File.WriteAllText(
+            outputPath,
+            json,
+            new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
 #endif
             }
         }
 
         /// <summary>
-        /// 
+        /// "[rewardKeys]" 형태의 헤더인지 확인하고
+        /// 실제 JSON 속성명인 "rewardKeys"를 반환한다.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        string DataCode(string name, string value)
+        static bool TryGetArrayName(string header, out string arrayName)
         {
-            var temp = string.Format("\"{0}\":\"{1}\"", name, value);
+            arrayName = string.Empty;
 
-            return temp;
+            if (header.Length < 3 ||
+                header[0] != '[' ||
+                header[^1] != ']')
+            {
+                return false;
+            }
+
+            arrayName = header[1..^1].Trim();
+
+            return arrayName.Length > 0;
         }
 
         /// <summary>
-        /// 
+        /// 엑셀 셀을 3행에 정의된 자료형에 맞춰 JSON 값으로 변환한다.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        string DataCode(string name, double value)
+        static JsonNode? ConvertCellToJson(
+    IXLCell cell,
+    string typeName)
         {
-            var temp = string.Format("\"{0}\":{1}", name, value);
+            if (cell.IsEmpty())
+                return null;
 
-            return temp;
+            if (string.IsNullOrWhiteSpace(typeName))
+            {
+                throw new InvalidDataException(
+                    $"자료형이 없습니다. 셀 위치: {cell.Address}");
+            }
+
+            var normalizedType = typeName.Trim().ToLowerInvariant();
+
+            switch (normalizedType)
+            {
+                case "byte":
+                    if (cell.TryGetValue<byte>(out var byteValue))
+                        return JsonValue.Create(byteValue);
+                    break;
+
+                case "short":
+                case "int16":
+                    if (cell.TryGetValue<short>(out var shortValue))
+                        return JsonValue.Create(shortValue);
+                    break;
+
+                case "int":
+                case "int32":
+                    if (cell.TryGetValue<int>(out var intValue))
+                        return JsonValue.Create(intValue);
+                    break;
+
+                case "long":
+                case "int64":
+                    if (cell.TryGetValue<long>(out var longValue))
+                        return JsonValue.Create(longValue);
+                    break;
+
+                case "float":
+                case "single":
+                    if (cell.TryGetValue<float>(out var floatValue))
+                        return JsonValue.Create(floatValue);
+                    break;
+
+                case "double":
+                    if (cell.TryGetValue<double>(out var doubleValue))
+                        return JsonValue.Create(doubleValue);
+                    break;
+
+                case "decimal":
+                    if (cell.TryGetValue<decimal>(out var decimalValue))
+                        return JsonValue.Create(decimalValue);
+                    break;
+
+                case "bool":
+                case "boolean":
+                    if (cell.TryGetValue<bool>(out var boolValue))
+                        return JsonValue.Create(boolValue);
+
+                    if (cell.TryGetValue<int>(out var boolNumber))
+                    {
+                        if (boolNumber == 1)
+                            return JsonValue.Create(true);
+
+                        if (boolNumber == 0)
+                            return JsonValue.Create(false);
+                    }
+                    break;
+
+                case "string":
+                    return JsonValue.Create(
+                        cell.GetFormattedString(
+                            CultureInfo.InvariantCulture));
+            }
+
+            /*
+             * EMissionType처럼 int, long 등이 아닌 자료형은
+             * enum 또는 문자열로 간주한다.
+             */
+            var stringValue = cell.GetFormattedString(
+                CultureInfo.InvariantCulture);
+
+            if (string.IsNullOrWhiteSpace(stringValue))
+                return null;
+
+            return JsonValue.Create(stringValue.Trim());
         }
     }
 }
