@@ -39,6 +39,12 @@ namespace TableDataConverter
             pPathTableData = $"{path}\\Assets\\Tables";
             pPathTableLocalData = $"{path}\\Assets\\Resources\\Tables";
 
+            // UI에서는 파일 종류별로 출력 폴더를 하나씩 선택한다.
+            pPathGlobalData = pPathScript;
+            pPathTableLocalData = pPathTableData;
+            textBoxScriptPath.Text = pPathScript;
+            textBoxBytesPath.Text = pPathTableData;
+
 
             //
             _mtCreater = new TableDataLoaderCreater();
@@ -100,6 +106,45 @@ namespace TableDataConverter
             label1.Text = $"Refresh complete";
         }
 
+        private void OnBtn_BrowseBytesPath(object sender, EventArgs e)
+        {
+            var selectedPath = SelectOutputFolder(pPathTableData, ".bytes 저장 경로 선택");
+            if (selectedPath == null)
+                return;
+
+            pPathTableData = selectedPath;
+            pPathTableLocalData = selectedPath;
+            textBoxBytesPath.Text = selectedPath;
+        }
+
+        private void OnBtn_BrowseScriptPath(object sender, EventArgs e)
+        {
+            var selectedPath = SelectOutputFolder(pPathScript, ".cs 저장 경로 선택");
+            if (selectedPath == null)
+                return;
+
+            pPathScript = selectedPath;
+            pPathGlobalData = selectedPath;
+            textBoxScriptPath.Text = selectedPath;
+        }
+
+        static string? SelectOutputFolder(string initialPath, string description)
+        {
+            using var dialog = new FolderBrowserDialog
+            {
+                Description = description,
+                SelectedPath = Directory.Exists(initialPath)
+                    ? initialPath
+                    : Directory.GetCurrentDirectory(),
+                ShowNewFolderButton = true,
+                UseDescriptionForTitle = true
+            };
+
+            return dialog.ShowDialog() == DialogResult.OK
+                ? dialog.SelectedPath
+                : null;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -113,6 +158,9 @@ namespace TableDataConverter
 
             try
             {
+                Directory.CreateDirectory(pPathScript);
+                Directory.CreateDirectory(pPathTableData);
+
                 var classNames = new List<string>();
 
                 foreach (var item in _fileInfos)
