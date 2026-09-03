@@ -43,6 +43,7 @@
             labelDatabasePath = new Label();
             textBoxDatabasePath = new TextBox();
             buttonBrowseDatabase = new Button();
+            buttonOpenDatabasePath = new Button();
             buttonSelectAllTables = new Button();
             buttonClearTables = new Button();
             buttonImportDatabase = new Button();
@@ -181,18 +182,28 @@
             textBoxDatabasePath.Location = new Point(13, 623);
             textBoxDatabasePath.Name = "textBoxDatabasePath";
             textBoxDatabasePath.ReadOnly = true;
-            textBoxDatabasePath.Size = new Size(610, 35);
+            textBoxDatabasePath.Size = new Size(490, 35);
             textBoxDatabasePath.TabIndex = 11;
             // 
             // buttonBrowseDatabase
             // 
-            buttonBrowseDatabase.Location = new Point(631, 621);
+            buttonBrowseDatabase.Location = new Point(511, 621);
             buttonBrowseDatabase.Name = "buttonBrowseDatabase";
             buttonBrowseDatabase.Size = new Size(102, 40);
             buttonBrowseDatabase.TabIndex = 12;
             buttonBrowseDatabase.Text = "찾아보기";
             buttonBrowseDatabase.UseVisualStyleBackColor = true;
             buttonBrowseDatabase.Click += OnBtn_BrowseDatabase;
+            // 
+            // buttonOpenDatabasePath
+            // 
+            buttonOpenDatabasePath.Location = new Point(621, 621);
+            buttonOpenDatabasePath.Name = "buttonOpenDatabasePath";
+            buttonOpenDatabasePath.Size = new Size(112, 40);
+            buttonOpenDatabasePath.TabIndex = 19;
+            buttonOpenDatabasePath.Text = "폴더 열기";
+            buttonOpenDatabasePath.UseVisualStyleBackColor = true;
+            buttonOpenDatabasePath.Click += OnBtn_OpenDatabasePath;
             // 
             // buttonSelectAllTables
             // 
@@ -238,6 +249,7 @@
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(746, 901);
+            Controls.Add(buttonOpenDatabasePath);
             Controls.Add(buttonOpenScriptPath);
             Controls.Add(buttonOpenBytesPath);
             Controls.Add(labelTables);
@@ -283,6 +295,7 @@
         private Label labelDatabasePath;
         private TextBox textBoxDatabasePath;
         private Button buttonBrowseDatabase;
+        private Button buttonOpenDatabasePath;
         private Button buttonSelectAllTables;
         private Button buttonClearTables;
         private Button buttonImportDatabase;

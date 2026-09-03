@@ -249,6 +249,31 @@ namespace TableDataConverter
             }
         }
 
+        private void OnBtn_OpenDatabasePath(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!File.Exists(textBoxDatabasePath.Text))
+                    throw new FileNotFoundException("DB 파일을 먼저 선택하세요.");
+
+                var directory = Path.GetDirectoryName(textBoxDatabasePath.Text)
+                    ?? throw new InvalidOperationException("DB 폴더 경로를 확인할 수 없습니다.");
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = directory,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(
+                    exception.Message,
+                    "폴더 열기 실패",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
         void LoadSettings()
         {
             try
@@ -366,6 +391,7 @@ namespace TableDataConverter
             buttonOpenBytesPath.Enabled = enabled;
             buttonOpenScriptPath.Enabled = enabled;
             buttonBrowseDatabase.Enabled = enabled;
+            buttonOpenDatabasePath.Enabled = enabled;
             buttonSelectAllTables.Enabled = enabled;
             buttonClearTables.Enabled = enabled;
             buttonImportDatabase.Enabled = enabled;
