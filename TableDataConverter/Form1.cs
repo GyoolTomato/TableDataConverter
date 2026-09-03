@@ -31,6 +31,7 @@ namespace TableDataConverter
         {
             //
             InitializeComponent();
+            Text = $"TDC v{Application.ProductVersion.Split('+')[0]}";
 
             //
             var path = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
