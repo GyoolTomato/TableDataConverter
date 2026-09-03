@@ -27,3 +27,8 @@ C:\GitHub\TableDataConverter\TableDataConverter\obj\Debug\net8.0-windows\win-x64
 C:\GitHub\TableDataConverter\TableDataConverter\obj\Debug\net8.0-windows\win-x64\TableDataConverter.pdb
 C:\GitHub\TableDataConverter\TableDataConverter\obj\Debug\net8.0-windows\win-x64\TableDataConverter.genruntimeconfig.cache
 C:\GitHub\TableDataConverter\TableDataConverter\obj\Debug\net8.0-windows\win-x64\ref\TableDataConverter.dll
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\Microsoft.Data.Sqlite.dll
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\SQLitePCLRaw.batteries_v2.dll
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\SQLitePCLRaw.core.dll
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\SQLitePCLRaw.provider.e_sqlite3.dll
+C:\GitHub\TableDataConverter\TableDataConverter\bin\Debug\net8.0-windows\win-x64\e_sqlite3.dll

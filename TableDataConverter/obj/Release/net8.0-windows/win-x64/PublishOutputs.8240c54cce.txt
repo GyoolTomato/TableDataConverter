@@ -1,0 +1,2 @@
+C:\GitHub\TableDataConverter\dist\win-x64\TableDataConverter.dll.config
+C:\GitHub\TableDataConverter\dist\win-x64\TableDataConverter.exe

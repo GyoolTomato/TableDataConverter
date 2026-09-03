@@ -1,6 +1,7 @@
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System.Configuration;
+using System.Diagnostics;
 using System.Globalization;
 using System.Reflection.Emit;
 using System.Text;
@@ -45,6 +46,8 @@ namespace TableDataConverter
             textBoxScriptPath.Text = pPathScript;
             textBoxBytesPath.Text = pPathTableData;
 
+            LoadSettings();
+
 
             //
             _mtCreater = new TableDataLoaderCreater();
@@ -62,7 +65,6 @@ namespace TableDataConverter
             RefreshFileInfos();
 
             //
-            listBox1.SelectionMode = SelectionMode.None;
             listBox1.Items.Clear();
             foreach (var item in _fileInfos)
             {
@@ -115,6 +117,7 @@ namespace TableDataConverter
             pPathTableData = selectedPath;
             pPathTableLocalData = selectedPath;
             textBoxBytesPath.Text = selectedPath;
+            SaveSettings();
         }
 
         private void OnBtn_BrowseScriptPath(object sender, EventArgs e)
@@ -126,6 +129,41 @@ namespace TableDataConverter
             pPathScript = selectedPath;
             pPathGlobalData = selectedPath;
             textBoxScriptPath.Text = selectedPath;
+            SaveSettings();
+        }
+
+        private void OnBtn_OpenBytesPath(object sender, EventArgs e)
+        {
+            OpenOutputFolder(pPathTableData);
+        }
+
+        private void OnBtn_OpenScriptPath(object sender, EventArgs e)
+        {
+            OpenOutputFolder(pPathScript);
+        }
+
+        static void OpenOutputFolder(string path)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(path))
+                    throw new InvalidOperationException("출력 폴더를 먼저 선택하세요.");
+
+                Directory.CreateDirectory(path);
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = path,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(
+                    exception.Message,
+                    "폴더 열기 실패",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         static string? SelectOutputFolder(string initialPath, string description)
@@ -143,6 +181,194 @@ namespace TableDataConverter
             return dialog.ShowDialog() == DialogResult.OK
                 ? dialog.SelectedPath
                 : null;
+        }
+
+        private void OnTableItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (e.NewValue == CheckState.Checked &&
+                !SqliteTableImporter.CanImport(_fileInfos[e.Index].Name))
+            {
+                e.NewValue = CheckState.Unchecked;
+            }
+
+            BeginInvoke(listBox1.Invalidate);
+        }
+
+        private void OnTableDrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0 || e.Index >= _fileInfos.Count)
+                return;
+
+            var canImport = SqliteTableImporter.CanImport(_fileInfos[e.Index].Name);
+            var isChecked = listBox1.GetItemChecked(e.Index);
+            var checkState = canImport
+                ? isChecked
+                    ? System.Windows.Forms.VisualStyles.CheckBoxState.CheckedNormal
+                    : System.Windows.Forms.VisualStyles.CheckBoxState.UncheckedNormal
+                : System.Windows.Forms.VisualStyles.CheckBoxState.UncheckedDisabled;
+
+            e.DrawBackground();
+
+            var glyphSize = CheckBoxRenderer.GetGlyphSize(e.Graphics, checkState);
+            var glyphLocation = new Point(
+                e.Bounds.Left + 3,
+                e.Bounds.Top + (e.Bounds.Height - glyphSize.Height) / 2);
+            CheckBoxRenderer.DrawCheckBox(e.Graphics, glyphLocation, checkState);
+
+            var textBounds = new Rectangle(
+                glyphLocation.X + glyphSize.Width + 6,
+                e.Bounds.Top,
+                e.Bounds.Width - glyphSize.Width - 9,
+                e.Bounds.Height);
+            TextRenderer.DrawText(
+                e.Graphics,
+                _fileInfos[e.Index].Name,
+                e.Font,
+                textBounds,
+                canImport ? e.ForeColor : SystemColors.GrayText,
+                TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+
+            if (canImport)
+                e.DrawFocusRectangle();
+        }
+
+        private void OnBtn_BrowseDatabase(object sender, EventArgs e)
+        {
+            using var dialog = new OpenFileDialog
+            {
+                Title = "SQLite DB 파일 선택",
+                Filter = "SQLite DB (*.db)|*.db|모든 파일 (*.*)|*.*",
+                CheckFileExists = true,
+                Multiselect = false
+            };
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                textBoxDatabasePath.Text = dialog.FileName;
+                SaveSettings();
+            }
+        }
+
+        void LoadSettings()
+        {
+            try
+            {
+                var settings = ConverterSettingsStore.Load();
+
+                if (!string.IsNullOrWhiteSpace(settings.BytesOutputPath))
+                {
+                    pPathTableData = settings.BytesOutputPath;
+                    pPathTableLocalData = settings.BytesOutputPath;
+                    textBoxBytesPath.Text = settings.BytesOutputPath;
+                }
+
+                if (!string.IsNullOrWhiteSpace(settings.ScriptOutputPath))
+                {
+                    pPathScript = settings.ScriptOutputPath;
+                    pPathGlobalData = settings.ScriptOutputPath;
+                    textBoxScriptPath.Text = settings.ScriptOutputPath;
+                }
+
+                textBoxDatabasePath.Text = settings.DatabasePath;
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(
+                    $"설정 파일을 읽을 수 없습니다. 기본 경로를 사용합니다.\n\n{exception.Message}",
+                    "설정 불러오기 실패",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
+
+        void SaveSettings()
+        {
+            try
+            {
+                ConverterSettingsStore.Save(new ConverterSettings
+                {
+                    BytesOutputPath = pPathTableData,
+                    ScriptOutputPath = pPathScript,
+                    DatabasePath = textBoxDatabasePath.Text
+                });
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(
+                    $"설정 파일을 저장할 수 없습니다.\n\n{exception.Message}",
+                    "설정 저장 실패",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
+
+        private void OnBtn_SelectAllTables(object sender, EventArgs e)
+        {
+            for (var index = 0; index < _fileInfos.Count; index++)
+                listBox1.SetItemChecked(index, SqliteTableImporter.CanImport(_fileInfos[index].Name));
+        }
+
+        private void OnBtn_ClearTables(object sender, EventArgs e)
+        {
+            for (var index = 0; index < listBox1.Items.Count; index++)
+                listBox1.SetItemChecked(index, false);
+        }
+
+        private void OnBtn_ImportDatabase(object sender, EventArgs e)
+        {
+            try
+            {
+                var selectedFiles = listBox1.CheckedIndices
+                    .Cast<int>()
+                    .Select(index => _fileInfos[index])
+                    .ToList();
+
+                if (selectedFiles.Count == 0)
+                    throw new InvalidOperationException("반영할 테이블을 하나 이상 선택하세요.");
+                if (!File.Exists(textBoxDatabasePath.Text))
+                    throw new FileNotFoundException("DB 파일을 선택하세요.");
+
+                var confirmation = MessageBox.Show(
+                    $"선택한 {selectedFiles.Count}개 테이블을 Excel 내용으로 교체합니다.\n계속하시겠습니까?",
+                    "DB 반영 확인",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+                if (confirmation != DialogResult.Yes)
+                    return;
+
+                label1.Text = "DB에 반영 중...";
+                SetButtonsEnabled(false);
+                var result = SqliteTableImporter.Import(textBoxDatabasePath.Text, selectedFiles);
+                label1.Text = $"DB 반영 완료: {result.TableCount}개 테이블, {result.RowCount}개 행";
+                MessageBox.Show(
+                    $"DB 반영이 완료되었습니다.\n\n백업: {result.BackupPath}",
+                    "DB 반영 완료",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            catch (Exception exception)
+            {
+                label1.Text = "DB 반영 실패";
+                MessageBox.Show(exception.Message, "DB 반영 실패", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                SetButtonsEnabled(true);
+            }
+        }
+
+        void SetButtonsEnabled(bool enabled)
+        {
+            button1.Enabled = enabled;
+            button2.Enabled = enabled;
+            buttonBrowseBytesPath.Enabled = enabled;
+            buttonBrowseScriptPath.Enabled = enabled;
+            buttonOpenBytesPath.Enabled = enabled;
+            buttonOpenScriptPath.Enabled = enabled;
+            buttonBrowseDatabase.Enabled = enabled;
+            buttonSelectAllTables.Enabled = enabled;
+            buttonClearTables.Enabled = enabled;
+            buttonImportDatabase.Enabled = enabled;
         }
 
         /// <summary>
