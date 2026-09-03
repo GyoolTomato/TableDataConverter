@@ -107,63 +107,89 @@ namespace TableDataConverter
         /// <param name="e"></param>
         private void OnBtn_Confirm(object sender, EventArgs e)
         {
-            //
             button1.Enabled = false;
             button2.Enabled = false;
-
-            //
             label1.Text = $"Converting...";
 
-            //
-            foreach (var item in _fileInfos)
+            try
             {
-                //
-                var fileName = item.Name.Replace(".xlsx", "");
-                var workBook = new XLWorkbook(item.FullName);
+                var classNames = new List<string>();
 
-                //
-                var numberName = fileName.Substring(1, 3);
-                if (numberName[0] == '0')
+                foreach (var item in _fileInfos)
                 {
-                    CreateEnum(fileName, workBook);
+                    var fileName = Path.GetFileNameWithoutExtension(item.Name);
+
+                    using var snapshot = CreateWorkbookSnapshot(item.FullName);
+                    using var workBook = new XLWorkbook(snapshot);
+
+                    var numberName = fileName.Substring(1, 3);
+                    if (numberName[0] == '0')
+                    {
+                        CreateEnum(fileName, workBook);
+                    }
+                    else
+                    {
+                        CreateClass(fileName, workBook);
+                        CreateData(fileName, workBook, numberName == "999");
+                    }
+
+                    foreach (var worksheet in workBook.Worksheets)
+                    {
+                        classNames.Add(worksheet.Name == "Data"
+                            ? fileName
+                            : $"{fileName}_{worksheet.Name}");
+                    }
                 }
-                else
+
+                _mtCreater.Create(classNames);
+                label1.Text = $"Convert complete";
+            }
+            catch (Exception exception)
+            {
+                label1.Text = $"Convert failed";
+                MessageBox.Show(
+                    exception.Message,
+                    "Convert failed",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            finally
+            {
+                button1.Enabled = true;
+                button2.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Excel에서 열어 둔 파일도 마지막으로 저장된 내용을 읽을 수 있도록
+        /// 공유 읽기 모드로 메모리 스냅샷을 만든다.
+        /// </summary>
+        static MemoryStream CreateWorkbookSnapshot(string path)
+        {
+            const int maxAttempts = 3;
+
+            for (var attempt = 1; attempt <= maxAttempts; attempt++)
+            {
+                try
                 {
-                    CreateClass(fileName, workBook);
-                    CreateData(fileName, workBook, numberName == "999");
+                    using var source = new FileStream(
+                        path,
+                        FileMode.Open,
+                        FileAccess.Read,
+                        FileShare.ReadWrite | FileShare.Delete);
+
+                    var snapshot = new MemoryStream();
+                    source.CopyTo(snapshot);
+                    snapshot.Position = 0;
+                    return snapshot;
+                }
+                catch (IOException) when (attempt < maxAttempts)
+                {
+                    Thread.Sleep(100);
                 }
             }
 
-            //
-            var classNames = new List<string>();
-            foreach (var item in _fileInfos)
-            {
-                //
-                var fileName = item.Name.Replace(".xlsx", "");
-                var workBook = new XLWorkbook(item.FullName);
-
-                //
-                var totalSheetCount = workBook.Worksheets.Count;
-                IXLWorksheet? worksheet = null;
-
-                for (int i = 0; i < totalSheetCount; i++)
-                {
-                    //
-                    worksheet = workBook.Worksheet(i + 1);
-                    if (worksheet == null)
-                        continue;
-
-                    classNames.Add(worksheet.Name == "Data" ? fileName : $"{fileName}_{worksheet.Name}");
-                }
-            }
-            _mtCreater.Create(classNames);
-
-            //
-            label1.Text = $"Convert complete";
-
-            //
-            button1.Enabled = true;
-            button2.Enabled = true;
+            throw new IOException($"Excel 파일을 읽을 수 없습니다: {path}");
         }
 
         /// <summary>
